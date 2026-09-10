@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Dexie Todo App</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <script type="module" crossorigin src="assets/index-bJmRm0VA.js"></script>
+    <link rel="stylesheet" crossorigin href="assets/index-B_G60NNB.css">
+  </head>
+  <body>
+    <nav>
+      <strong>📝 My Todos</strong>
+    </nav>
+    <main x-data="todoApp()" x-init="init()">
+      <h1>My Todo List</h1>
+
+      <!-- Add Todo -->
+      <form @submit.prevent="addTodo()">
+        <input
+          type="text"
+          x-model="newTodo"
+          placeholder="What needs to be done?"
+          required
+        />
+
+        <button type="submit">Add Todo</button>
+      </form>
+
+      <!-- Loading -->
+      <p x-show="loading">Loading todos...</p>
+
+      <!-- Todo List -->
+      <ul>
+        <template x-for="todo in todos" :key="todo.id">
+          <li>
+            <label>
+              <input
+                type="checkbox"
+                :checked="todo.completed"
+                @change="toggleTodo(todo)"
+              />
+
+              <span
+                x-text="todo.title"
+                :class="{ completed: todo.completed }"
+              ></span>
+            </label>
+
+            <button @click="deleteTodo(todo.id)">🗑 Delete</button>
+          </li>
+        </template>
+      </ul>
+
+      <!-- Empty State -->
+      <p x-show="!loading && todos.length === 0">🎉 No todos yet!</p>
+    </main>
+  </body>
+</html>
