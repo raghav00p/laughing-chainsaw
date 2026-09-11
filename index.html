@@ -1,18 +1,75 @@
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JavaScript Code Runner</title>
-  <link rel="stylesheet" href="style.css"></link>
-</head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Storage API with Alpine.js</title>
+    <link rel="stylesheet" href="//unpkg.com/chota" />
+    <script defer src="https://unpkg.com/alpinejs"></script>
+    <script src="https://unpkg.com/dexie"></script>
+    <script src="https://unpkg.com/rxjs@7/dist/bundles/rxjs.umd.js"></script>
+    <script src="https://unpkg.com/dexie-cloud-addon/dist/umd/dexie-cloud-addon.js"></script>
+    <!--script src="https://unpkg.com/dexie"></script>
+    <script src="https://unpkg.com/rxjs@7/dist/bundles/rxjs.umd.js"></script>
+    <script src="https://unpkg.com/dexie-cloud-addon/dist/umd/dexie-cloud-addon.js"></script>
+    <script src="https://unpkg.com/dexie@latest/dist/dexie.min.js"></script>
+    <script src="https://unpkg.com/dexie-cloud-addon@latest/dist/umd/dexie-cloud-addon.min.js"></script-->
+    <script src="script.js"></script>
+  </head>
 
-<body>
-<a href="mane.html">Oracle</a>
-  <textarea id="codeInput" placeholder="Write your JavaScript code here..."></textarea>
+  <body>
+    <div x-data="storageApp()" x-init="init()">
+      <h2>Quick Note (localStorage)</h2>
+      <div
+        x-show="errorMessage"
+        x-text="errorMessage"
+        style="
+          color: red;
+          background: #ffe6e6;
+          padding: 10px;
+          margin: 10px 0;
+          border-radius: 5px;
+        "
+      ></div>
 
-  <pre id="output"></pre>
-  <div id="tit">
-  </div>
-<script src="script.js"></script>
-</body>
+      <textarea
+        x-model="quickNote"
+        @input="saveQuickNote()"
+        placeholder="Type your note to save in localStorage"
+      >
+      </textarea>
 
+      <h2>Notes (IndexedDB)</h2>
+
+      <input
+        x-model="newNote"
+        type="text"
+        placeholder="Enter a note"
+        @keyup.enter="addNote()"
+      />
+
+      <button @click="addNote()">Add Note</button>
+
+      <div id="notesList">
+        <template x-if="notes.length === 0">
+          <p style="text-align: center">No notes yet</p>
+        </template>
+
+        <template x-for="note in notes" :key="note.id">
+          <div class="note">
+            <div>
+              <p x-text="note.content" style="margin: 0 0 5px 0"></p>
+
+              <small style="color: #999" x-text="formatDate(note.createdAt)">
+              </small>
+            </div>
+
+            <button class="delete-btn" @click="deleteNote(note.id)">
+              Delete
+            </button>
+          </div>
+        </template>
+      </div>
+    </div>
+  </body>
 </html>
